@@ -1,28 +1,34 @@
-import { useEffect, useState} from 'react'
-import './App.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Navbar from './components/Navbar';
+import ProtectedRoute from './components/ProtectedRoute';
+import CardBrowser from './pages/CardBrowser';
+import CardDetail from './pages/CardDetail';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
+import './App.css';
 
-function App() {
-  const [cards, setCards] = useState([]);
-
-  useEffect(() => {
-    fetch("http://localhost:8080/api/cards")
-      .then((res) => res.json())
-      .then((data) => setCards(data));
-  }, []);
-
+export default function App() {
   return (
-    <div>
-      <h1>Pokéshop </h1>
-      {cards.map((card) => (
-        <div key={card.id}>
-          <h2>{card.name}</h2>
-          <p>{card.setName} — {card.rarity}</p>
-          <p>Condition: {card.condition}</p>
-          <p>Price: ${card.price}</p>
-        </div>
-      ))}
-    </div>
+    <AuthProvider>
+      <BrowserRouter>
+        <Navbar />
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<CardBrowser />} />
+            <Route path="/cards/:id" element={<CardDetail />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </main>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
-
-export default App
