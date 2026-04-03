@@ -20,7 +20,7 @@ export default function CardBrowser() {
 
   const filtered = cards.filter((c) => {
     const matchesSearch = c.name.toLowerCase().includes(search.toLowerCase());
-    const matchesRarity = rarity === 'All' || c.rarity === rarity;
+    const matchesRarity = rarity === 'All' || c.rarity?.name === rarity;
     const matchesCondition = condition === 'All' || c.condition === condition;
     return matchesSearch && matchesRarity && matchesCondition;
   });
@@ -51,12 +51,23 @@ export default function CardBrowser() {
       <div className="card-grid">
         {filtered.map((card) => (
           <Link to={`/cards/${card.id}`} key={card.id} className="card-tile">
-            <div className="card-tile-rarity">{card.rarity}</div>
+            <div className="card-tile-image-wrap">
+              {card.images && card.images.length > 0 ? (
+                <img
+                  src={`/api/images/${card.images[0].id}`}
+                  alt={card.name}
+                  className="card-tile-image"
+                />
+              ) : (
+                <div className="card-tile-image-placeholder" />
+              )}
+            </div>
             <h2 className="card-tile-name">{card.name}</h2>
-            <p className="card-tile-set">{card.setName}</p>
+            <div className="card-tile-rarity">{card.rarity?.name}</div>
+            <p className="card-tile-set">{card.expansionSets?.map((s) => s.name).join(', ')}</p>
             <div className="card-tile-footer">
-              <span className="card-tile-condition">{card.condition}</span>
               <span className="card-tile-price">${Number(card.price).toFixed(2)}</span>
+              <span className="card-tile-condition">{card.condition}</span>
             </div>
           </Link>
         ))}
