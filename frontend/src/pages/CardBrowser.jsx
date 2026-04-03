@@ -5,6 +5,11 @@ import { getCards } from '../api';
 const RARITIES = ['All', 'Common', 'Uncommon', 'Rare', 'Holo Rare', 'Ultra Rare', 'Secret Rare'];
 const CONDITIONS = ['All', 'Mint', 'Near Mint', 'Lightly Played', 'Moderately Played', 'Heavily Played'];
 
+function getRaritySlug(name) {
+  if (!name) return 'unknown';
+  return name.toLowerCase().replace(/\s+/g, '-');
+}
+
 export default function CardBrowser() {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -49,8 +54,13 @@ export default function CardBrowser() {
       {!loading && filtered.length === 0 && <p className="status-msg">No cards found.</p>}
 
       <div className="card-grid">
-        {filtered.map((card) => (
-          <Link to={`/cards/${card.id}`} key={card.id} className="card-tile">
+        {filtered.map((card, index) => (
+          <Link
+            to={`/cards/${card.id}`}
+            key={card.id}
+            className="card-tile"
+            style={{ animationDelay: `${index * 0.06}s` }}
+          >
             <div className="card-tile-image-wrap">
               {card.images && card.images.length > 0 ? (
                 <img
@@ -61,13 +71,18 @@ export default function CardBrowser() {
               ) : (
                 <div className="card-tile-image-placeholder" />
               )}
+              <div className="card-tile-shimmer" />
             </div>
-            <h2 className="card-tile-name">{card.name}</h2>
-            <div className="card-tile-rarity">{card.rarity?.name}</div>
-            <p className="card-tile-set">{card.expansionSets?.map((s) => s.name).join(', ')}</p>
-            <div className="card-tile-footer">
-              <span className="card-tile-price">${Number(card.price).toFixed(2)}</span>
-              <span className="card-tile-condition">{card.condition}</span>
+            <div className="card-tile-body">
+              <span className={`rarity-badge rarity-${getRaritySlug(card.rarity?.name)}`}>
+                {card.rarity?.name}
+              </span>
+              <h2 className="card-tile-name">{card.name}</h2>
+              <p className="card-tile-set">{card.expansionSets?.map((s) => s.name).join(', ')}</p>
+              <div className="card-tile-footer">
+                <span className="card-tile-price">${Number(card.price).toFixed(2)}</span>
+                <span className="card-tile-condition">{card.condition}</span>
+              </div>
             </div>
           </Link>
         ))}

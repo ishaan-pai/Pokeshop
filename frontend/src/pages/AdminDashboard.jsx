@@ -20,7 +20,6 @@ export default function AdminDashboard() {
   const [formError, setFormError] = useState('');
   const [saving, setSaving] = useState(false);
 
-  // Inline add-new state
   const [addingRarity, setAddingRarity] = useState(false);
   const [newRarityName, setNewRarityName] = useState('');
   const [rarityAddError, setRarityAddError] = useState('');

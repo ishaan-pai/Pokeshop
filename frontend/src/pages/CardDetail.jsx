@@ -2,6 +2,11 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getCard } from '../api';
 
+function getRaritySlug(name) {
+  if (!name) return 'unknown';
+  return name.toLowerCase().replace(/\s+/g, '-');
+}
+
 export default function CardDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -23,11 +28,17 @@ export default function CardDetail() {
   if (error) return (
     <div className="page center-content">
       <p className="status-msg">Card not found.</p>
-      <button className="btn" onClick={() => navigate('/')}>Back to Browse</button>
+      <button className="btn btn-secondary" style={{ marginTop: '1.5rem' }} onClick={() => navigate('/')}>
+        ← Back to Browse
+      </button>
     </div>
   );
 
-  if (!card) return <div className="page center-content"><p className="status-msg">Loading...</p></div>;
+  if (!card) return (
+    <div className="page center-content">
+      <p className="status-msg">Loading...</p>
+    </div>
+  );
 
   const images = card.images || [];
 
@@ -63,7 +74,11 @@ export default function CardDetail() {
           </div>
 
           <div className="detail-info">
-            <div className="detail-rarity">{card.rarity?.name}</div>
+            <div className="detail-rarity">
+              <span className={`rarity-badge rarity-${getRaritySlug(card.rarity?.name)}`}>
+                {card.rarity?.name}
+              </span>
+            </div>
             <h1 className="detail-name">{card.name}</h1>
             <p className="detail-set">{card.expansionSets?.map((s) => s.name).join(', ')}</p>
 

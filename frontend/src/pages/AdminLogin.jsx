@@ -33,7 +33,10 @@ export default function AdminLogin() {
   return (
     <div className="page center-content">
       <form className="login-form" onSubmit={handleSubmit}>
-        <h1 className="login-title">Admin Login</h1>
+        <div className="login-header">
+          <p className="login-brand">POKÉSHOP</p>
+          <h1 className="login-title">Admin Access</h1>
+        </div>
         {error && <p className="form-error">{error}</p>}
         <label className="form-label">
           Username
@@ -56,7 +59,7 @@ export default function AdminLogin() {
           />
         </label>
         <button className="btn btn-primary" type="submit" disabled={loading}>
-          {loading ? 'Logging in...' : 'Login'}
+          {loading ? 'Signing in...' : 'Sign In'}
         </button>
       </form>
     </div>

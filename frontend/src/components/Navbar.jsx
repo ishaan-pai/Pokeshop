@@ -13,19 +13,19 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <Link to="/" className="navbar-brand">
-        Pokéshop
+        POKÉSHOP
       </Link>
       <div className="navbar-links">
-        <Link to="/">Browse</Link>
+        <Link to="/" className="navbar-link">Browse</Link>
         {isAdmin ? (
           <>
-            <Link to="/admin">Dashboard</Link>
+            <Link to="/admin" className="navbar-link">Dashboard</Link>
             <button className="btn-logout" onClick={handleLogout}>
               Logout
             </button>
           </>
         ) : (
-          <Link to="/admin/login">Admin</Link>
+          <Link to="/admin/login" className="navbar-link navbar-link--dim">Admin</Link>
         )}
       </div>
     </nav>
